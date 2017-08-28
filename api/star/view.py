@@ -1,45 +1,51 @@
 import typing
+import json
 from apistar import Response
 from apistar import http
 
+from api.star.schema import StarSchema
+from api.star.model import Star
 
-from api.star.schema import Star
 
-_items: typing.List[typing.Tuple[int, Star]] = []
-
-def get() -> typing.List[Star]:
+def get() -> typing.List[StarSchema]:
     """
     Get all the stars.
     """
-    return [Star(item[1]) for item in _items]
+    stars = Star.objects.to_json()
+    return Response(stars, status=200, headers={'content-type': 'application/json'})
 
 
-def post(new_star: Star) -> Star:
+def post(new_star: StarSchema) -> StarSchema:
     """
     Create a new star.
     """
-    _items.append((len(_items), new_star))
-    return Star(new_star)
+    saved_star = Star(**new_star)
+    saved_star.save()
+    return Response(saved_star.to_json(), status=201, headers={'content-type': 'application/json'})
 
 
-def get_one(star_id: int) -> Star:
+def get_one(star_id: str) -> StarSchema:
     """
     Get star by id.
     """
-    return Star(_items[star_id - 1][1])
+    star = Star.objects(id=star_id)
+    return Response(star.to_json(), status=200, headers={'content-type': 'application/json'})
 
 
-def put(star_id: int, new_star: Star) -> Star:
+def put(star_id: str, new_star: StarSchema) -> StarSchema:
     """
     Edit a star by id.
     """
-    _items[star_id - 1][1].update(new_star)
-    return Star(_items[star_id - 1][1])
+    star = Star.objects.get(id=star_id)
+    star.modify(**new_star)
+    star.save()
+    return Response(star.to_json(), status=200, headers={'content-type': 'application/json'})
 
 
-def delete(star_id: int) -> Star:
+def delete(star_id: str) -> StarSchema:
     """
     Delete a star by id.
     """
-    deleted_star = _items.pop((star_id - 1))
-    return Star(deleted_star[1])
+    star = Star.objects.get(id=star_id)
+    star.delete()
+    return Response(star.to_json(), status=200, headers={'content-type': 'application/json'})

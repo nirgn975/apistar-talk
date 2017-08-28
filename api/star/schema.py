@@ -1,18 +1,18 @@
 from apistar import typesystem
 
 
-class Rating(typesystem.Integer):
+class RatingSchema(typesystem.Integer):
     minimum = 1
     maximum = 5
 
 
-class Size(typesystem.Enum):
+class SizeSchema(typesystem.Enum):
     enum = ['small', 'medium', 'large']
 
 
-class Star(typesystem.Object):
+class StarSchema(typesystem.Object):
     properties = {
         'name': typesystem.string(max_length=100),
-        'rating': Rating,
-        'size': Size,
+        'rating': RatingSchema,
+        'dimension': SizeSchema,
     }
