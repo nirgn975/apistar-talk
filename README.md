@@ -31,3 +31,6 @@ Use `uvicorn` to run the app, and change `--workers` flag to how many CPU cores 
 ```
 $ uvicorn app:app --workers=4 --bind=0.0.0.0:5000 --pid=pid
 ```
+
+[license-image]: https://img.shields.io/badge/license-ISC-blue.svg
+[license-url]: https://github.com/nirgn975/apistar-talk/blob/master/LICENSE
