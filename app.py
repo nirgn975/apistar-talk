@@ -1,4 +1,4 @@
-from apistar.frameworks.asyncio import ASyncIOApp as App
+from apistar.frameworks.wsgi import WSGIApp as App
 
 from api.routes import routes
 
